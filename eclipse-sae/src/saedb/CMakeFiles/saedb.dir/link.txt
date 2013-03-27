@@ -1,0 +1,2 @@
+/usr/bin/ar cr libsaedb.a  CMakeFiles/saedb.dir/dumb.cpp.o
+/usr/bin/ranlib libsaedb.a

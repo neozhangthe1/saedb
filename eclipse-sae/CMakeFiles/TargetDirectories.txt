@@ -1,0 +1,6 @@
+/home/neo/Projects/saedb/eclipse-sae/src/app/graph_analysis/connected_component/CMakeFiles/connected_component.dir
+/home/neo/Projects/saedb/eclipse-sae/src/app/graph_analysis/kcores/CMakeFiles/kcores.dir
+/home/neo/Projects/saedb/eclipse-sae/src/app/demo/pagerank/CMakeFiles/pagerank.dir
+/home/neo/Projects/saedb/eclipse-sae/src/saedb/CMakeFiles/saedb.dir
+/home/neo/Projects/saedb/eclipse-sae/src/app/basic/shortest_path/CMakeFiles/shortest_path.dir
+/home/neo/Projects/saedb/eclipse-sae/src/app/graph_analysis/triangle/CMakeFiles/triangle.dir
