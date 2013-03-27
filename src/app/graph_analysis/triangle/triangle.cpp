@@ -16,12 +16,14 @@
  *
  */
 #include <iostream>
+#include <boost/unordered_set.hpp>
 #include "sae_include.hpp"
 #include "sample_data.cpp"
 
 class vdata{
 public:
-    std::vector<int> vid_set;
+	int num_triangles;
+	boost::unordered_set<saedb::vertex_id_type> vid_set;
 
     int size(){
         return vid_set.size();
@@ -31,46 +33,39 @@ public:
 
 
 //define the triangle count data structure
-class triangle_count{
-public:
-    int out_triangles;
-    int in_triangles;
-    int through_triangles;
-    int cycle_triangles;
-
-    triangle_count& operator+=(const triangle_count& other){
-        out_triangles += other.out_triangles;
-        in_triangles += other.in_triangles;
-        through_triangles += other.through_triangles;
-        cycle_triangles += other.cycle_triangles;
-        return *this;
-    }
-};
+//class triangle_count{
+//public:
+//    int out_triangles;
+//    int in_triangles;
+//    int through_triangles;
+//    int cycle_triangles;
+//
+//    triangle_count& operator+=(const triangle_count& other){
+//        out_triangles += other.out_triangles;
+//        in_triangles += other.in_triangles;
+//        through_triangles += other.through_triangles;
+//        cycle_triangles += other.cycle_triangles;
+//        return *this;
+//    }
+//};
 
 //define gather type
 //it accumulates all neighboring vertices into a vector
-class gather_set_union{
+class gather_set_union {
 public:
-    std::vector<int> vectices;
+    boost::unordered_set<saedb::vertex_id_type> vid_set;
 
-    int size() const{
-        return vectices.size();
-    }
-
-    gather_set_union& operator+=(const gather_set_union& other){
-        if(size() == 0){
-            (*this) = other;
-            return (*this);
-        }else if(other.size() == 0){
-            return (*this);
-        }
-
+    gather_set_union& operator+=(const gather_set_union& other) {
+    	for(saedb::vertex_id_type vid : other.vid_set) {
+    		vid_set.insert(vid);
+    	}
+    	return *this;
     }
 
 };
 
 typedef vdata vertex_data_type;
-typedef float edge_data_type;
+typedef int edge_data_type;
 typedef saedb::sae_graph<vertex_data_type, edge_data_type> graph_type;
 
 typedef gather_set_union gather_type;
@@ -85,10 +80,9 @@ typedef gather_set_union gather_type;
  *  store the size of the intersection on the edge
  * on gather, we accumulate a set of all adjacent vertices.
  */
-class common_neighbors:
+class triangle_count:
     public saedb::IAlgorithm<graph_type, gather_type>{
 private:
-    bool perform_scatter;
 
 public:
     //gather on all edges
@@ -101,42 +95,35 @@ public:
     gather_type gather(icontext_type& context,
             const vertex_type& vertex,
             edge_type& edge) const{
-    	gather_type gather;
+    	gather_type gather_data;
         //get neighbor
-        int n_id = (edge.target().id() == vertex.id()) ?
-            edge.source().id() : edge.target().id();
-        int n_degree = (edge.target().id() == vertex.id())?
-            (edge.source().num_in_edges() + edge.source().num_out_edges()):
-            (edge.target().num_out_edges() + edge.target().num_out_edges());
-        int degree = vertex.num_in_edges() + vertex.num_out_edges();
-        if ((n_degree > degree) || (n_degree == degree && n_id > vertex.id())){
-            gather.v = n_id;
-        }
+    	saedb::vertex_id_type other_id = edge.source().id() == vertex.id() ?
+    									 edge.target().id() : edge.source().id();
+    	if(other_id > vertex.id())	gather_data.vid_set.insert(other_id);
         return gather;
     }
 
     //the gather result now contains the vertex Id in the neighborhood.
     //store it on the vertex
     void apply(icontext_type& context,
-            vertex_type& vertex,
-            const gather_type& neighborhood){
-        perform_scatter = true;
-        if (neighborhood.vertices.size() == 0){
-            //only 0 or 1 neighbors
-            vertex.data().vid_set.clear();
-            if(neighborhood.v != -1){
-                vertex.data().vid_set.vid_vec.push_back(neighborhood.v);
-            }
-        }else{
-            vertex.data().vid_set.assign(neighborhood.vertices);
-        }
-        perform_scatter = vertex.data().vid_set.size() != 0;
+               vertex_type& vertex,
+               const gather_type& neighborhood){
+    	vertex.data().vid_set = neighborhood.vid_set();
     }
 
     edge_dir_type scatter_edge(icontext_type& context,
             const vertex_type& vertex) const{
-        if(perform_scatter) return saedb::OUT_EDGES;
-        else return saedb::NO_EDGES;
+        return saedb::OUT_EDGES;
+    }
+
+    int count_set_intersect(
+                 const boost::unordered_set<vertex_id_type>& smaller_set,
+                 const boost::unordered_set<vertex_id_type>& larger_set) {
+      size_t count = 0;
+      for(saedb::vertex_id_type vid : smaller_set) {
+        count += larger_set.count(vid);
+      }
+      return count;
     }
 
     //count the intersection of the neighborhood of the adjacent vertices.
@@ -152,21 +139,21 @@ public:
             edge.data() += count_set_intersect(srclist.vid_set, targetlist.vid_set);
         }
     }
-}
+};
 
-class triangle_count:
-    public saedb::sae_algorithm<graph_type, int>{
+class per_vertex_count:
+    public saedb::IAlgorithm<graph_type, int>{
 public:
     //gather on all edges
     edge_dir_type gather_edges(icontext_type& context,
-            const vertex_type& vertex) const {
+            				   const vertex_type& vertex) const {
         return saedb::ALL_EDGES;
     }
 
     //gather the number of triangles each edge is involved in
     int gather(icontext_type& context,
-            const vertex_type& vertex,
-            edge_type& edge) const {
+               const vertex_type& vertex,
+               edge_type& edge) const {
         return edge.data();
     }
 
@@ -174,10 +161,9 @@ public:
     //each adjacent edge is involved in.
     //dividing by 2 gives the number of triangle
     void apply(icontext_type& context,
-            const vertex_type& vertex,
-            edge_type& edge) const {
-        vertex.data().vid_set.clear();
-        vertex.data().num_triangle = num_triangles / 2;
+    		vertex_type& vertex,
+            const gather_type& num_triangles) {
+        vertex.data().num_triangles = num_triangles / 2;
     }
 
     //no scatter
@@ -185,7 +171,7 @@ public:
             const vertex_type& vertex) const {
         return saedb::NO_EDGES;
     }
-}
+};
 
 
 int main(){
@@ -200,11 +186,13 @@ int main(){
         << std::endl;
 
     //running the engine
-    saedb::sae_synchronous_engine<common_neighbors> engine_common_neighors(graph);
-    engine_common_neighors.start();
-
-    saedb::sae_synchronous_engine<triangle_count> engine_triangle_count(graph);
+    saedb::SynchronousEngine<triangle_count> engine_triangle_count(graph);
+    engine_triangle_count.signalAll();
     engine_triangle_count.start();
+
+    saedb::SynchronousEngine<triangle_count> engine_per_vertex_count(graph);
+    engine_per_vertex_count.signalAll();
+    engine_per_vertex_count.start();
 
     std::cout << "Done" << std::endl;
     return 0;
