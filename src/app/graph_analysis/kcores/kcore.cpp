@@ -37,12 +37,8 @@ typedef saedb::sae_graph<vertex_data_type, edge_data_type> graph_type;
 
 int current_k;
 
-void init_vertex_data(vertex_type& vertex){
-    vertex.data() = vertex.num_in_edges() + vertex.num_out_edges();
-}
-
 class kcore:
-    public saedb::sae_algorithm<graph_type, float>{
+    public saedb::IAlgorithm<graph_type, float>{
 
 private:
     //when a node just been deleted, it's neighbor will be signal in scatter
@@ -50,6 +46,11 @@ private:
 
 public:
     kcore():just_deleted(false) {}
+
+    void init(icontext_type& context,
+    		  vertex_type& vertex){
+    	vertex.data() = vertex.num_in_edges() + vertex.num_out_edges();
+    }
 
     edge_dir_type gather_edges(icontext_type& context,
             const vertex_type& vertex) const{
@@ -78,8 +79,9 @@ public:
           saedb::ALL_EDGES : saedb::NO_EDGES;
     }
 
-    void scatter(icontext_type& context, const vertex_type& vertex,
-          edge_type& edge) const {
+    void scatter(icontext_type& context,
+    		     const vertex_type& vertex,
+    		     edge_type& edge) const {
         vertex_type other = edge.source().id() == vertex.id() ? edge.target() : edge.source();
         if(other.data() > 0){
             context.signal(other);
@@ -95,9 +97,8 @@ int main(){
     graph_type graph = sample_graph();
 
     int kmax = 10;
-    int kmax = 0;
-    saedb::sae_synchronous_engine<kcore> engine(graph);
-    graph.transform_vertices(init_vertex_data);
+    int kmin = 0;
+    saedb::SynchronousEngine<kcore> engine(graph);
     for(current_k = kmin; current_k <= kmax; current_k++){
         engine.start();
     }

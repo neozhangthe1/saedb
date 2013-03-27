@@ -21,10 +21,10 @@ public:
 using namespace saedb;
 
 template <typename data_type, typename gather_type>
-class shortest_path: public sae_algorithm <sae_graph<data_type, data_type>, gather_type>
+class shortest_path: public IAlgorithm <sae_graph<data_type, data_type>, gather_type>
 {
 public:
-	typedef sae_algorithm<sae_graph<data_type, data_type>, gather_type> alg_type;
+	typedef IAlgorithm<sae_graph<data_type, data_type>, gather_type> alg_type;
 	typedef typename alg_type::icontext_type icontext_type;
 	typedef typename alg_type::vertex_type vertex_type;
 	typedef typename alg_type::edge_type edge_type;
@@ -64,7 +64,7 @@ int main()
 	shortest_path<float, SP_dis> sp;
 	float_graph graph = generate_graph();
 
-	sae_synchronous_engine<shortest_path<float, SP_dis> > engine(graph);
+	SynchronousEngine<shortest_path<float, SP_dis> > engine(graph);
 	engine.start();
 
 	return 0;

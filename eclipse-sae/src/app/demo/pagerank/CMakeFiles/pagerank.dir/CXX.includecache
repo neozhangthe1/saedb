@@ -6,6 +6,8 @@
 
 #IncludeRegexTransform: 
 
+../src/saedb/aggregator/iaggregator.hpp
+
 ../src/saedb/context.hpp
 set
 -
@@ -15,8 +17,6 @@ cassert
 -
 icontext.hpp
 ../src/saedb/icontext.hpp
-
-../src/saedb/engine.hpp
 
 ../src/saedb/graph.hpp
 string
@@ -38,7 +38,17 @@ local_graph.hpp
 vector
 -
 
+../src/saedb/ialgorithm.hpp
+graph_basic_types.hpp
+../src/saedb/graph_basic_types.hpp
+icontext.hpp
 ../src/saedb/icontext.hpp
+
+../src/saedb/icontext.hpp
+
+../src/saedb/iengine.hpp
+aggregator/iaggregator.hpp
+../src/saedb/aggregator/iaggregator.hpp
 
 ../src/saedb/local_graph.hpp
 vector
@@ -51,10 +61,10 @@ graph_storage.hpp
 ../src/saedb/sae_include.hpp
 graph.hpp
 ../src/saedb/graph.hpp
-engine.hpp
-../src/saedb/engine.hpp
-vertex_program.hpp
-../src/saedb/vertex_program.hpp
+iengine.hpp
+../src/saedb/iengine.hpp
+ialgorithm.hpp
+../src/saedb/ialgorithm.hpp
 synchronous_engine.hpp
 ../src/saedb/synchronous_engine.hpp
 
@@ -75,21 +85,19 @@ bitset
 -
 mutex
 -
-engine.hpp
-../src/saedb/engine.hpp
+iengine.hpp
+../src/saedb/iengine.hpp
 context.hpp
 ../src/saedb/context.hpp
-
-../src/saedb/vertex_program.hpp
-graph_basic_types.hpp
-../src/saedb/graph_basic_types.hpp
-icontext.hpp
-../src/saedb/icontext.hpp
+aggregator/iaggregator.hpp
+../src/saedb/aggregator/iaggregator.hpp
 
 /home/neo/Projects/saedb/src/app/demo/pagerank/pagerank.cpp
 iostream
 -
 string
+-
+math.h
 -
 sae_include.hpp
 /home/neo/Projects/saedb/src/app/demo/pagerank/sae_include.hpp

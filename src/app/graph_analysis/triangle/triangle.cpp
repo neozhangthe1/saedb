@@ -26,11 +26,9 @@ public:
     int size(){
         return vid_set.size();
     }
-}
+};
 
-class edate{
-public:
-}
+
 
 //define the triangle count data structure
 class triangle_count{
@@ -47,7 +45,7 @@ public:
         cycle_triangles += other.cycle_triangles;
         return *this;
     }
-}
+};
 
 //define gather type
 //it accumulates all neighboring vertices into a vector
@@ -67,12 +65,15 @@ public:
             return (*this);
         }
 
-        for(int i=0; i<other.vectices.size(); ++i){
-
-        }
     }
 
-}
+};
+
+typedef vdata vertex_data_type;
+typedef float edge_data_type;
+typedef saedb::sae_graph<vertex_data_type, edge_data_type> graph_type;
+
+typedef gather_set_union gather_type;
 
 
 /**
@@ -85,7 +86,7 @@ public:
  * on gather, we accumulate a set of all adjacent vertices.
  */
 class common_neighbors:
-    public saedb::sae_algorithm<graph, gather_type>{
+    public saedb::IAlgorithm<graph_type, gather_type>{
 private:
     bool perform_scatter;
 
@@ -100,7 +101,7 @@ public:
     gather_type gather(icontext_type& context,
             const vertex_type& vertex,
             edge_type& edge) const{
-        set_union_gather gather;
+    	gather_type gather;
         //get neighbor
         int n_id = (edge.target().id() == vertex.id()) ?
             edge.source().id() : edge.target().id();

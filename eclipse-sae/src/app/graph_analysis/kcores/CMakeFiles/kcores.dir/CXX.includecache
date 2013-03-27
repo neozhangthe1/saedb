@@ -84,25 +84,13 @@ context.hpp
 aggregator/iaggregator.hpp
 ../src/saedb/aggregator/iaggregator.hpp
 
-/home/neo/Projects/saedb/src/app/basic/shortest_path/generate.hpp
+/home/neo/Projects/saedb/src/app/graph_analysis/kcores/kcore.cpp
 iostream
 -
-fstream
+string
 -
 sae_include.hpp
-/home/neo/Projects/saedb/src/app/basic/shortest_path/sae_include.hpp
-
-/home/neo/Projects/saedb/src/app/basic/shortest_path/shortest_path.cpp
-iostream
--
-limits
--
-fstream
--
-algorithm
--
-sae_include.hpp
-/home/neo/Projects/saedb/src/app/basic/shortest_path/sae_include.hpp
-generate.hpp
-/home/neo/Projects/saedb/src/app/basic/shortest_path/generate.hpp
+/home/neo/Projects/saedb/src/app/graph_analysis/kcores/sae_include.hpp
+sample_data.cpp
+/home/neo/Projects/saedb/src/app/graph_analysis/kcores/sample_data.cpp
 
