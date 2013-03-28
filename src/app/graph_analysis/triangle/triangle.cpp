@@ -18,7 +18,7 @@
 #include <iostream>
 #include <boost/unordered_set.hpp>
 #include "sae_include.hpp"
-#include "sample_data.cpp"
+#include "sample_data.hpp"
 
 class vdata{
 public:
@@ -100,7 +100,7 @@ public:
     	saedb::vertex_id_type other_id = edge.source().id() == vertex.id() ?
     									 edge.target().id() : edge.source().id();
     	if(other_id > vertex.id())	gather_data.vid_set.insert(other_id);
-        return gather;
+        return gather_data;
     }
 
     //the gather result now contains the vertex Id in the neighborhood.
@@ -108,7 +108,7 @@ public:
     void apply(icontext_type& context,
                vertex_type& vertex,
                const gather_type& neighborhood){
-    	vertex.data().vid_set = neighborhood.vid_set();
+    	vertex.data().vid_set = neighborhood.vid_set;
     }
 
     edge_dir_type scatter_edge(icontext_type& context,
@@ -116,7 +116,7 @@ public:
         return saedb::OUT_EDGES;
     }
 
-    int count_set_intersect(
+    const int count_set_intersect(
                  const boost::unordered_set<vertex_id_type>& smaller_set,
                  const boost::unordered_set<vertex_id_type>& larger_set) {
       size_t count = 0;
@@ -134,9 +134,9 @@ public:
         const vertex_data_type& srclist = edge.source().data();
         const vertex_data_type& targetlist = edge.target().data();
         if (targetlist.vid_set.size() < srclist.vid_set.size()){
-            edge.data() += count_set_intersect(targetlist.vid_set, srclist.vid_set);
+            edge.data() = count_set_intersect(targetlist.vid_set, srclist.vid_set);
         }else{
-            edge.data() += count_set_intersect(srclist.vid_set, targetlist.vid_set);
+            edge.data() = count_set_intersect(srclist.vid_set, targetlist.vid_set);
         }
     }
 };
@@ -172,6 +172,10 @@ public:
         return saedb::NO_EDGES;
     }
 };
+
+graph_type sample_graph(){
+    return LOAD_SAMPLE_GRAPH<graph_type>();
+}
 
 
 int main(){

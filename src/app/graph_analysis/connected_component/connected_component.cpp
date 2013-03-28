@@ -19,12 +19,12 @@
 #include <string>
 
 #include "sae_include.hpp"
-#include "sample_data.cpp"
+#include "sample_data.hpp"
 
 //define vertex data structure
 class vdata{
 public:
-    long label;
+    int label;
 };
 
 //define gather type
@@ -90,7 +90,7 @@ public:
     void apply(icontext_type& context,
             vertex_type& vertex,
             const gather_type& min_neighbor_id){
-        if(min_neighbor_id < vertex.data().label){
+        if(min_neighbor_id.label < vertex.data().label){
         	vertex.data().label = min_neighbor_id.label;
             perform_scatter = true;
         }else{
@@ -116,6 +116,10 @@ public:
     						 edge.source() : edge.target();
     	context.signal(other);
     }
+};
+
+graph_type sample_graph(){
+    return LOAD_SAMPLE_GRAPH<graph_type>();
 }
 
 //require a reduce phase to aggregate all the data

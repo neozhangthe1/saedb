@@ -18,7 +18,7 @@
 #include <iostream>
 #include <string>
 #include "sae_include.hpp"
-#include "sample_data.cpp"
+#include "sample_data.hpp"
 
 
 /**
