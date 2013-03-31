@@ -6,7 +6,7 @@
  */
 namespace saedb {
     template<typename GraphType,typename GatherType,typename MessageType>
-    class IContext
+    class
     {
     public:
 	    typedef GraphType                           graph_type;
