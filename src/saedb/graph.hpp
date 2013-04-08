@@ -78,7 +78,7 @@ namespace saedb
 		  int counter = 0;
 		  std::cout << "show fist 100 vertex data" << std::endl;
 		  for ( it = vertex_id_2_data.begin(); it != vertex_id_2_data.end();++it){
-			std::cout << it->first << " " << it->second << std::endl;
+			//std::cout << it->first << " " << it->second << std::endl;
 			counter++;
 			if (counter > 100)
 			      break;

@@ -1,0 +1,4 @@
+/home/neo/Project/saedb/eclipse-sae/src/app/community/alpha_beta/CMakeFiles/alpha_beta.dir
+/home/neo/Project/saedb/eclipse-sae/src/app/demo/pagerank/CMakeFiles/pagerank.dir
+/home/neo/Project/saedb/eclipse-sae/src/saedb/CMakeFiles/saedb.dir
+/home/neo/Project/saedb/eclipse-sae/src/app/basic/shortest_path/CMakeFiles/shortest_path.dir

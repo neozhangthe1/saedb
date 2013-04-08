@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>SAE-Debug@eclipse-sae</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.cdt.make.core.makeBuilder</name>
+			<triggers>clean,full,incremental,</triggers>
+			<arguments>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>
+					<value>clean</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.enableCleanBuild</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.append_environment</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.stopOnError</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.enabledIncrementalBuild</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.command</key>
+					<value>/usr/bin/make</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.contents</key>
+					<value>org.eclipse.cdt.make.core.activeConfigSettings</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.target.inc</key>
+					<value>all</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.arguments</key>
+					<value></value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.buildLocation</key>
+					<value>/home/neo/Project/saedb/eclipse-sae</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.useDefaultBuildCmd</key>
+					<value>false</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.environment</key>
+					<value>VERBOSE=1|CMAKE_NO_VERBOSE=1|</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.enableFullBuild</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.target.auto</key>
+					<value>all</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.enableAutoBuild</key>
+					<value>false</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.target.clean</key>
+					<value>clean</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.fullBuildTarget</key>
+					<value>all</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.buildArguments</key>
+					<value></value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.location</key>
+					<value>/home/neo/Project/saedb/eclipse-sae</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.autoBuildTarget</key>
+					<value>all</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.core.errorOutputParser</key>
+					<value>org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser;</value>
+				</dictionary>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.cdt.make.core.ScannerConfigBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.cdt.core.ccnature</nature>
+		<nature>org.eclipse.cdt.make.core.makeNature</nature>
+		<nature>org.eclipse.cdt.make.core.ScannerConfigNature</nature>
+		<nature>org.eclipse.cdt.core.cnature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>[Subprojects]</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Subprojects]/alpha_beta</name>
+			<type>2</type>
+			<location>/home/neo/Project/saedb/src/app/community/alpha_beta</location>
+		</link>
+		<link>
+			<name>[Subprojects]/pagerank</name>
+			<type>2</type>
+			<location>/home/neo/Project/saedb/src/app/demo/pagerank</location>
+		</link>
+		<link>
+			<name>[Subprojects]/saedb</name>
+			<type>2</type>
+			<location>/home/neo/Project/saedb/src/saedb</location>
+		</link>
+		<link>
+			<name>[Subprojects]/shortest_path</name>
+			<type>2</type>
+			<location>/home/neo/Project/saedb/src/app/basic/shortest_path</location>
+		</link>
+		<link>
+			<name>[Targets]</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Source Files/dumb.cpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/saedb/dumb.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Header Files/icontext.hpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/saedb/icontext.hpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Header Files/iengine.hpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/saedb/iengine.hpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Header Files/context.hpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/saedb/context.hpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Header Files/graph_basic_types.hpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/saedb/graph_basic_types.hpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Header Files/local_graph.hpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/saedb/local_graph.hpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Header Files/graph_storage.hpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/saedb/graph_storage.hpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Header Files/ialgorithm.hpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/saedb/ialgorithm.hpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Header Files/sae_include.hpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/saedb/sae_include.hpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Header Files/sample_data.hpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/saedb/sample_data.hpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Header Files/graph.hpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/saedb/graph.hpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Header Files/synchronous_engine.hpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/saedb/synchronous_engine.hpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] saedb/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] alpha_beta</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] alpha_beta/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] alpha_beta/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] alpha_beta/Source Files/alpha_beta.cpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/app/community/alpha_beta/alpha_beta.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] alpha_beta/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] alpha_beta/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] alpha_beta/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] alpha_beta/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] shortest_path</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] shortest_path/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] shortest_path/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] shortest_path/Source Files/shortest_path.cpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/app/basic/shortest_path/shortest_path.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] shortest_path/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] shortest_path/Header Files/generate.hpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/app/basic/shortest_path/generate.hpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] shortest_path/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] shortest_path/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] shortest_path/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] pagerank</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] pagerank/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] pagerank/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] pagerank/Source Files/pagerank.cpp</name>
+			<type>1</type>
+			<location>/home/neo/Project/saedb/src/app/demo/pagerank/pagerank.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] pagerank/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] pagerank/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] pagerank/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] pagerank/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>eclipse-sae</name>
+			<type>2</type>
+			<location>/home/neo/Project/saedb/eclipse-sae</location>
+		</link>
+	</linkedResources>
+</projectDescription>

@@ -1,7 +1,8 @@
 //#define DEGBUG
 #include <iostream>
 #include <cstdlib>
-#include "sample_data.hpp"
+#include "sae_include.hpp"
+//#include "sample_data.hpp"
 
 #define ASSERT(X) {if (!(X)) { printf("ERROR LINE %d\n", __LINE__); exit(0); }}
 
@@ -41,7 +42,6 @@ struct VertexDataType {
 		isSeed = false;
 		inCluster = false;
 		changed = true;
-		alphaBeta = new AlphaBetaType();
 	}
 };
 
@@ -52,8 +52,17 @@ struct ABSetType {
 
 	ABSetType() :
 			found(false) {
-		aSet = new vector();
-		bSet = new vector();
+	}
+};
+
+struct GatherDataType {
+	AlphaBetaType alphaBeta;
+	set<saedb::vertex_id_type> neighborSet;
+
+	GatherDataType& operator+=(const GatherDataType& other){
+		this->alphaBeta += other.alphaBeta;
+		this->neighborSet.insert(other.neighborSet.begin(), other.neighborSet.end());
+		return *this;
 	}
 };
 
@@ -63,9 +72,9 @@ private:
 	AlphaBetaType accu;
 
 public:
-	void init(void* i) {
-		accu = *((float*) i);
-	}
+//	void init(void* i) {
+//		accu = *((float*) i);
+//	}
 
 	void reduce(void* next) {
 		accu.alpha = max(accu.alpha, ((AlphaBetaType*) next)->alpha);
@@ -85,15 +94,15 @@ private:
 
 public:
 	void init(void* i) {
-		abSet = new ABSetType();
+		//abSet = new ABSetType();
 	}
 
 	void reduce(void* next) {
-		VertexDataType* vertexData = next;
+		VertexDataType* vertexData = (VertexDataType*)next;
 		if (vertexData->inCluster) {
 			for(auto _a : abSet.aSet){
 				//found a pair
-				if(vertexData->neighborSet.find(_a) == vertexData->neighborSet.end()){
+				if(vertexData->neighborSet.find(_a->id) == vertexData->neighborSet.end()){
 					//swap
 					vertexData->inCluster = false;
 					_a->inCluster = true;
@@ -110,9 +119,36 @@ public:
 	}
 };
 
-//aggregator instances
-AlphaBetaAggregator* globalAlphaBeta;
-ABSetAggregator* globalABSet;
+
+//perform swapping alogrithm
+class SwappingAggregator: public saedb::IAggregator {
+private:
+	bool a = false;
+	bool b = false;
+
+public:
+	void init(void* i) {
+
+	}
+
+	void reduce(void* next) {
+		VertexDataType* vertexData = (VertexDataType*)next;
+		if(!a){
+			if(!vertexData->inCluster){
+				if
+			}
+		}else if(!b){
+			if(vertexData->inCluster){
+
+			}
+		}
+	}
+
+	void* data() const{
+
+	}
+}
+
 
 //determine alpha_beta community size
 int K = 100;
@@ -120,23 +156,24 @@ int* samples;
 
 //define graph type
 typedef float edge_data_type;
-typedef AlphaBetaType gather_data_type;
+typedef GatherDataType gather_type;
 typedef saedb::sae_graph<VertexDataType, edge_data_type> graph_type;
 
 //caculate current global alpha beta
-class AlphaBeta: public saedb::IAlgorithm<graph_type, gather_data_type> {
+class AlphaBeta: public saedb::IAlgorithm<graph_type, gather_type> {
 private:
 	bool initNeighborSet;
+	bool changed;
+	int stage;//0:caculate global alpha beta, 1:
 public:
-	AlphaBeta(): initNeighborSet(true) {};
 
 	//random choose a subset of K vertices
 	void init(icontext_type& context, vertex_type& vertex) {
 		vertex.data().id = vertex.id();
 	}
 
-	edge_dir_type gather_type(icontext_type& context,
-			const vertex_type& vertex) {
+	edge_dir_type gather_edges(icontext_type& context,
+			const vertex_type& vertex) const{
 		if(vertex.data().changed){
 			return saedb::ALL_EDGES;
 		}else{
@@ -146,61 +183,59 @@ public:
 	}
 
 	//compute alpha & beta value for each vertex
-	float gather(icontext_type& context, const vertex_type& vertex,
-			edge_type& edge) {
-		vertex_type other =
-				edge.source_id != vertex.id() ? edge.source() : edge.target();
-		gather_data_type gather_data = new gather_data_type();
+	gather_type gather(icontext_type& context, const vertex_type& vertex, edge_type& edge) const{
+		vertex_type other = edge.source().id() != vertex.id() ? edge.source() : edge.target();
+		GatherDataType gather_data;// = new gather_type();
 		if(initNeighborSet){
-			vertex.data().neighborSet.insert(other.id());
-			initNeighborSet = false;
+			gather_data.neighborSet.insert(other.id());
+			//initNeighborSet = false;
 		}
 		if (other.data().inCluster) {
-			gather_data.alpha = 0;
-			gather_data.beta = 1;
+			gather_data.alphaBeta.alpha = 0;
+			gather_data.alphaBeta.beta = 1;
 		} else {
-			gather_data.alpha = 1;
-			gather_data.beta = 0;
+			gather_data.alphaBeta.alpha = 1;
+			gather_data.alphaBeta.beta = 0;
 		}
 		return gather_data;
 	}
 
-	void apply(icontext_type& context, vertex_type& vertex,
-			gather_data_type& total) {
-		vertex.data().alphaBeta = total;
+	void apply(icontext_type& context, vertex_type& vertex, const gather_type& total) {
+		vertex.data().alphaBeta = total.alphaBeta;
+		vertex.data().neighborSet = total.neighborSet;
 
-		saedb::IAggregator* alphaBetaAggerator = context.getAggregator("global_alpha_beta");
-		AlphaBetaType* alphaBeta = alphaBetaAggerator->data();
-		if (alphaBeta->alpha > alphaBeta->beta) {
-			//swapping
-			if (vertex.data().inCluster) {
-				//in set B
-#ifdef DEBUG
-				ASSERT(vertex.data().alphaBeta.alpha <= globalAlphaBeta->data()->alpha);
-#endif
-				if (vertex.data().alphaBeta.alpha
-						== ((AlphaBetaType*) globalAlphaBeta->data())->alpha) {
-					vertex.data().inCluster = false;
-				}
-			} else {
-				//in set A
-#ifdef DEBUG
-				ASSERT(vertex.data().alphaBeta.beta >= globalAlphaBeta->data()->beta);
-#endif
-				if (vertex.data().alphaBeta.beta
-						== ((AlphaBetaType*) globalAlphaBeta->data())->beta) {
-					vertex.data().inCluster = true;
-				}
-			}
-			//end of swapping
-		} else if (alphaBeta->alpha == alphaBeta->beta) {
-
-		}
+//		saedb::IAggregator* alphaBetaAggerator = context.getAggregator("global_alpha_beta");
+//		AlphaBetaType* alphaBeta = (AlphaBetaType*)alphaBetaAggerator->data();
+//		if (alphaBeta->alpha > alphaBeta->beta) {
+//			//swapping
+//			if (vertex.data().inCluster) {
+//				//in set B
+//#ifdef DEBUG
+//				ASSERT(vertex.data().alphaBeta.alpha <= globalAlphaBeta->data()->alpha);
+//#endif
+//				if (vertex.data().alphaBeta.alpha
+//						== ((AlphaBetaType*) alphaBetaAggerator->data())->alpha) {
+//					vertex.data().inCluster = false;
+//				}
+//			} else {
+//				//in set A
+//#ifdef DEBUG
+//				ASSERT(vertex.data().alphaBeta.beta >= globalAlphaBeta->data()->beta);
+//#endif
+//				if (vertex.data().alphaBeta.beta
+//						== ((AlphaBetaType*) alphaBetaAggerator->data())->beta) {
+//					vertex.data().inCluster = true;
+//				}
+//			}
+//			//end of swapping
+//		} else if (alphaBeta->alpha == alphaBeta->beta) {
+//
+//		}
 
 	}
 
-	edge_dir_type scatter_type(icontext_type& context,
-			const vertex_type& vertex) {
+	edge_dir_type scatter_edges(icontext_type& context,
+			const vertex_type& vertex) const{
 		if(vertex.data().changed){
 			return saedb::ALL_EDGES;
 		}else{
@@ -209,30 +244,30 @@ public:
 
 	}
 
-	void scatter(icontext_type& context, const vertex_type& vertex,
-			edge_type& edge) {
-//		vertex_type other =
-//				edge.source_id != vertex.id() ? edge.source() : edge.target();
-//		if (vertex.data().inCluster) {
-//			if (other.data().inCluster) {
-//				vertex.data().abSet.push_back(other.id());
-//			}
-//		} else {
-//			if (!other.data().inCluster) {
-//				vertex.data().abSet.push_back(other.id());
-//			}
-//		}
-//		vertex.data().changed = false;
+	void scatter(icontext_type& context, const vertex_type& vertex, edge_type& edge) const{
+		vertex_type other = edge.source().id() != vertex.id() ? edge.source() : edge.target();
+		if (vertex.data().inCluster) {
+			if (other.data().inCluster) {
+				vertex.data().abSet.push_back(other.id());
+			}
+		} else {
+			if (!other.data().inCluster) {
+				vertex.data().abSet.push_back(other.id());
+			}
+		}
+		vertex.data().changed = false;
 	}
 
 	void aggerate(icontext_type& context, const vertex_type& vertex) {
-//		AlphaBetaAggregator* alphaBetaAggerator = context.getAggregator("global_alpha_beta");
-//		AlphaBetaType _alphaBeta = vertex.data().alphaBeta;
-//		alphaBetaAggerator->reduce(&_alphaBeta);
+		//caculate global alpha beta
+		AlphaBetaAggregator* alphaBetaAggerator = (AlphaBetaAggregator*)context.getAggregator("global_alpha_beta");
+		AlphaBetaType _alphaBeta = vertex.data().alphaBeta;
+		alphaBetaAggerator->reduce(&_alphaBeta);
+
 //		if (_alphaBeta.alpha > _alphaBeta.beta) {
 //			context.signal(vertex);
 //		} else if (_alphaBeta.alpha == _alphaBeta.beta) {
-//			ABSetAggregator* abSetAggregator = context.getAggregator("global_ab_set");
+//			ABSetAggregator* abSetAggregator = (ABSetAggregator*)context.getAggregator("global_ab_set");
 //			if(((ABSetType*)abSetAggregator->data())->found) return;
 //			VertexDataType _vdata = vertex.data();
 //			abSetAggregator->reduce(&_vdata);
@@ -242,33 +277,18 @@ public:
 	}
 };
 
-//implemented swapping algorithm
-class Swapping: public saedb::IAlgorithm<graph_type, int> {
-private:
 
-public:
-	edge_dir_type gather_type(icontext_type& context,
-			const vertex_type& vertex) {
-		return saedb::ALL_EDGES;
-	}
-
-	void gather(icontext_type& context, const vertex_type& vertex,
-			edge_type& edge) {
-
-	}
-
-};
-
-int reservoirSample(int sample, int* samples, int size, int count) {
-	if (count < sample)
-		samples[count] = sample;
-	else if ((rand() % count) < size)
-		sample[rand() % size] = sample;
-	return ++count;
-}
+//int reservoirSample(int sample, int* samples, int size, int count) {
+//	if (count < sample)
+//		samples[count] = sample;
+//	else if ((rand() % count) < size)
+//		sample[rand() % size] = sample;
+//	return ++count;
+//}
 
 graph_type sampleGraph() {
-	return LOAD_SAMPLE_GRAPH<graph_type>();
+	//return LOAD_SAMPLE_GRAPH<graph_type>();
+	return graph_type();
 }
 
 int main() {
@@ -288,28 +308,19 @@ int main() {
 			samples[index] = vertex_id;
 		count = rand() % index;
 		if (count < K) {
-			sample[count] = vertex_id;
+			samples[count] = vertex_id;
 		}
 		index += 1;
 	}
+	//aggregator instances
+	AlphaBetaAggregator* globalAlphaBeta;
+	ABSetAggregator* globalABSet;
 
 	//caculate global alpha beta
 	saedb::SynchronousEngine<AlphaBeta> alphaBetaEngine(graph);
 	//aggregator
 	AlphaBetaType* initAlphaBeta = new AlphaBetaType();
-	saedb::IAggregator* globalAlphaBeta = new AlphaBetaAggregator();
+	globalAlphaBeta = new AlphaBetaAggregator();
 	globalAlphaBeta->init(initAlphaBeta);
 	alphaBetaEngine.registerAggregator("global_alpha_beta", globalAlphaBeta);
-
-	AlphaBetaType* initAlphaBeta = new AlphaBetaType();
-	saedb::IAggregator* globalAlphaBeta = new AlphaBetaAggregator();
-	globalAlphaBeta->init(initAlphaBeta);
-	alphaBetaEngine.registerAggregator("global_ab_set", globalABSet);
-
-	alphaBetaEngine.signalAll();
-	alphaBetaEngine.start();
-
-	//swapping phase
-	saedb::SynchronousEngine<Swapping> swappingEngine(graph);
-
 }
